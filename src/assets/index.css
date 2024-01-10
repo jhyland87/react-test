@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Poppins', sans-serif;
+  @apply bg-slate-50;
+}
+
+.container, .header-container, .login-container, .profile-container {
+  @apply w-full max-w-3xl p-5 mx-auto;
+}
+
+
+#overview-table  {
+  margin-left:auto; 
+  margin-right:auto;
+  width: 50%;
+}
+
+#overview-table > thead > tr > th {
+  font-style: bold;
+}
+
+
+#overview-table > tbody > tr {
+
+}
+
+
+.pad-left-right {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.overview-name {
+  text-align:right;
+  font-weight: bold;
+  padding-right: 15px;
+}
+
+.overview-value {
+  text-align:left;
+  padding-left: 15px;
+}
+
+
+.center-me {
+  margin-left:auto; 
+  margin-right:auto;
+  text-align:center;
+  width: 50%;
+}
