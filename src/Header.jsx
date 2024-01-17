@@ -1,21 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { session } from './utils'
-
-
-/*
-import cn from 'classnames'
-import { findInputError, isFormInvalid } from '../utils'
-import { useFormContext } from 'react-hook-form'
-import { AnimatePresence, motion } from 'framer-motion'
-import { MdError } from 'react-icons/md'
-import { useState } from 'react'
-import Select from 'react-select';
-*/
+import React, { useState, useEffect, useContext } from 'react'
+import { LogoutLink } from './LogoutLink';
 
 export const Header = (props) => {
+  const {sessionContext, setSessionContext} = useContext(props.context);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const homeLink = e =>  navigate('/')
+
+  const logoutLink = <LogoutLink context={props.context} />
+
+  const loginLink = <Link 
+      to='/login'
+      className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" >
+      Login
+    </Link>
+
   return (
     <div id="header" className="header-container flex items-center justify-between">
-     <svg width="160" height="21" viewBox="0 0 160 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Openlane Logo" className="sc-eoVZPG gjeWjA">
+     <svg onClick={homeLink} width="160" height="21" viewBox="0 0 160 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Openlane Logo" className="sc-eoVZPG gjeWjA header-link">
         <g clipPath="url(#clip0_1228_1616)">
           <path 
             fill="#0061FF"
@@ -55,11 +61,7 @@ export const Header = (props) => {
           </clipPath>
         </defs>
       </svg>
-      <Link 
-        to={session.getUsername() ? '/logout' : '/login'}
-        className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" >
-        {session.getUsername() ? 'Log out' : 'Log in'}
-      </Link>
+      {sessionContext ? logoutLink : loginLink}
     </div>
   )
 }

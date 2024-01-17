@@ -10,22 +10,18 @@ export function getUsername() {
 export function loginAs(email){
   let timeout =  timeoutDate()
 
-  console.log('timeout:',timeout)
-
   // Create cookie to expire {config.session.timeoutSec} from now
   Cookies.set('loginEmail', email, {
     expires: timeout
   })
-
-  setTimeout(() => {
-    if ( getUsername() )
-      window.location = '/timeout'
-  },  Math.floor(config.session.timeout * 60000))
 }
 
 export function deauth(){
   console.log('deauth..');
   if ( Cookies.get('loginEmail') ){
     Cookies.remove('loginEmail')
+    return true
   }
+
+  return false;
 }

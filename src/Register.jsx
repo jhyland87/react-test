@@ -1,5 +1,4 @@
 import { Input } from './components'
-import { Header } from './Header'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
   name_validation,
@@ -10,18 +9,17 @@ import {
   password2_validation
 } from './utils/inputValidations'
 import { Link,  useNavigate } from "react-router-dom";
-
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import { BsFillCheckSquareFill, BsExclamationCircle } from 'react-icons/bs'
-
-
 import Account from './models/Account'
 
 export const Register = props => {
+  const {
+    //sessionContext, 
+    setSessionContext
+  } = useContext(props.context);
+
   const navigate = useNavigate();
-
-  const [redirectTo, setRedirect] = useState(false)
-
 
   const methods = useForm()
   const [success, setSuccess] = useState(false)
@@ -42,30 +40,20 @@ export const Register = props => {
     // Create a new account
     const account = new Account(data)
 
-    console.log('Phone:', account.phone)
-
     account.save();
-    console.log('Phone:', account.phone)
 
     methods.reset()
-    setSuccess(`An account with ${data.email} has been created!`)
+    setSuccess(`An account with ${data.email} has been created!..`)
     setError(false)
-    setRedirect('/overview')
+
+    setSessionContext(data.email)
+    setTimeout(() => {
+      navigate('/overview', { replace: true })
+    }, 500);
   })
-
-
-  useEffect(() => {
-    navigate(redirectTo);    
-  }, [redirectTo]);
-
-
 
   return (
     <FormProvider {...methods}>
-      <Header 
-        //username={session.getUsername()} 
-        //logInOutLink={loginLink}
-        className="grid gap-5 md:grid-cols-2"/>
       <form
         onSubmit={e => e.preventDefault()}
         noValidate
@@ -77,6 +65,11 @@ export const Register = props => {
           <BsExclamationCircle /> Error: {error}
         </p>
         )}
+        {success && (
+          <p className="font-semibold text-green-500 mb-5 flex items-center gap-1">
+            <BsFillCheckSquareFill /> {success}
+          </p>
+        )}
         <div className="grid gap-5 md:grid-cols-2">
           <Input {...name_validation} />
           <Input {...email_validation} />
@@ -86,11 +79,7 @@ export const Register = props => {
           <Input {...password2_validation} />
         </div>
         <div className="mt-5">
-          {success && (
-            <p className="font-semibold text-green-500 mb-5 flex items-center gap-1">
-              <BsFillCheckSquareFill /> {success}
-            </p>
-          )}
+         
           <div className="flex items-center justify-between">
             <button
               onClick={onSubmit}

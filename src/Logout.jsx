@@ -1,14 +1,24 @@
 
-import { Header } from './Header'
 import { session } from './utils'
+import React, { useState, useContext } from 'react'
 
 export const Logout = props => {
-  session.deauth() 
+  const {sessionContext, setSessionContext} = useContext(props.context);
+
+  let message;
+
+  if ( sessionContext ){
+    message = `Logged out of ${sessionContext} (${session.getUsername()})...`
+
+    setSessionContext(false)
+  }
+  else {
+    message = "Must be logged in to log out...";
+  }
 
   return (
     <div>
-      <Header className="grid gap-5 md:grid-cols-2"/>
-      <div className=" center-me">Logged out</div>
+      <div className=" center-me">{ message }</div>
     </div>
   )
 }

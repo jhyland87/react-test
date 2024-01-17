@@ -21,8 +21,8 @@ export default class Account {
    * @return {Account}          Instance of Account with accounts data
    */
   static getAccount( email ){
-    if ( ! email ) 
-      return new Error('No email provided')
+    if ( ! email ) return false
+      //return new Error('No email provided')
   
     const accountObj = localStorage.getItem( email.toLowerCase() );
 
@@ -76,6 +76,8 @@ export default class Account {
    * @return {void}
    */
   delete(){
+    if ( ! this.#_data?.email ) return;
+    
     console.log('Deleting localStorage for %s', this.#_data.email.toLowerCase());
     localStorage.removeItem(this.#_data.email.toLowerCase());
     this.#_data = null;

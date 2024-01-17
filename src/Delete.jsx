@@ -1,58 +1,45 @@
-import { Header } from './Header'
 import Account from './models/Account'
-import { 
-  session
-} from './utils'
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useContext } from 'react'
+import { session } from './utils'
 
 export const Delete = props => {
-  const username = session.getUsername();
-  const account = Account.getAccount(username)
+  const navigate = useNavigate();
+  const {sessionContext, setSessionContext} = useContext(props.context);
 
-  
-  if ( ! username ){
-   // setDeleteMsg("No active session to reference for delete..")
-    console.error("No active session to reference for delete..")
+  const [success, setSuccess] = useState(props?.message || false)
+  const [error, setError] = useState(props?.error || false)
+
+  const showError = err => {
+    setSuccess(false)
+    setError(err)
   }
-  else if ( ! account || account instanceof Error ){
-    //setDeleteMsg(`Error finding account for ${username}`)
-    console.error(`Error finding account for ${username}`)
-  } else {
-    // Delete it..
-    account.delete()
-    session.deauth()
 
-    
-    // Verify it was deleted
-    if ( ! Account.getAccount(username)){
-      //setDeleteMsg(`Account for ${username} has been deleted`)
-      console.log(`Account for ${username} has been deleted`)
-    }
-    else {
-      //setDeleteMsg(`Account for ${username} failed to delete`)
-      console.error(`Account for ${username} failed to delete.. that's weird`)
-    } 
+  const showSuccess = async message => {
+    setError(false)
+    setSuccess(message)
+  }
+
+  let message
+  if ( ! sessionContext || typeof sessionContext !== 'object'){
+    message = 'You must first login before you can delete your account (duh..)'
+  }
+  else {
+    message = 'Deleting your account..'
+
+    setTimeout(()=>{
+      sessionContext.delete()
+
+      setSessionContext(false)
+      navigate('/', { replace: true })
+    }, 500)
   }
 
   return (
-    <div id="profile-container">
-      <Header 
-        //username={session.getUsername()} 
-        //logInOutLink={loginLink}
-        className="grid gap-5 md:grid-cols-2"/>
-
-     
+    <div id="profile-container">     
       <p className="font-semibold text-green-500 mb-5 flex items-center gap-1 center-me">
-        Account deleted (if you had one to begin with..)
-        {/* I was going to display {deleteMsg} here, but then
-            I kept getting plagued with redirect loop errors
-            when calling setDeleteMsg(), 
-        */}
-
+        {message}
       </p>
-
-   
-    
-        
     </div>
   )
 }

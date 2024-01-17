@@ -1,29 +1,25 @@
-import { Header } from './Header'
+//import { Header } from './Header'
 import Account from './models/Account'
 import { session } from './utils'
 import { Link, useNavigate } from "react-router-dom";
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 
 export const Overview = props => {
+  const {sessionContext, setSessionContext} = useContext(props.context);
+
+  console.log('sessionContext:',sessionContext);
+
   const navigate = useNavigate();
 
-  const username = session.getUsername();
+  if (  sessionContext === false || typeof sessionContext !== 'object' ){
+    setTimeout(() => navigate('/login', { replace: true }), 10)
+    return
+  } 
 
-  // If there's no session, then redirect to the login page
-  useEffect(() => {
-    if (! username) 
-      navigate("/login");
-  }, [username]);
+  const accountData =  sessionContext//sessionContext ? Account.getAccount(sessionContext) : null;
 
-  const accountData = username ? Account.getAccount(username) : null;
-  console.log('accountData:',accountData)
   return (
     <div id="profile-container">
-      <Header 
-        //username={session.getUsername()} 
-        //logInOutLink={loginLink}
-        className="grid gap-5 md:grid-cols-2"/>
-
       <table id="overview-table">
         <thead>
           <tr>
@@ -58,8 +54,6 @@ export const Overview = props => {
         Delete Account
       </Link>
       </div>
-    
-        
     </div>
   )
 }

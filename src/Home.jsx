@@ -1,16 +1,12 @@
-import { Header } from './Header'
 import { session } from './utils'
 import { Link } from "react-router-dom";
+import React, { useState, useContext } from 'react'
 
 export const Home = props => {
+  const {sessionContext, setSessionContext} = useContext(props.context);
+
   return (
-    <div id="home-container" >
-     
-      <Header 
-        //username={session.getUsername()} 
-        //logInOutLink={loginLink}
-        className="grid gap-5 md:grid-cols-2"/>
-     
+    <div id="home-container" >     
       <div className="center-me">
         <Link 
           to={session.getUsername() ? '/logout' : '/login'}
@@ -24,7 +20,6 @@ export const Home = props => {
           {session.getUsername() ? 'Edit Profile' : 'Create Account'}
         </Link>
       </div>
-        
     </div>
   )
 }

@@ -1,5 +1,3 @@
-
-import { Header } from './Header'
 import { Input } from './components'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
@@ -7,14 +5,15 @@ import {
   login_password_validation,
 } from './utils/inputValidations'
 import { session } from './utils'
-import React, { useState } from 'react'
+import React, { useState, useContext} from 'react'
 import { BsFillCheckSquareFill, BsExclamationCircle } from 'react-icons/bs'
 import { Link, useNavigate } from "react-router-dom";
 import Account from './models/Account'
 
 
-
 export const Login = props => {
+  const {sessionContext, setSessionContext} = useContext(props.context);
+
   const methods = useForm()
   const navigate = useNavigate();
 
@@ -22,54 +21,47 @@ export const Login = props => {
   const [error, setError] = useState(props?.error || false)
   const [loginSuccess, setLoginSuccess] = useState(false)
 
+  const showError = err => {
+    setSuccess(false)
+    setError(err)
+  }
 
-    const showError = err => {
-      setSuccess(false)
-      setError(err)
-    }
-
-    const showSuccess = async message => {
-      setError(false)
-      setSuccess(message)
-    }
-
-  console.log('loginSuccess:', loginSuccess);
-
-  //if ( props.action === 'logout' ) session.deauth()
-
-
-  // This is to handle the redirect after login, which needs to be rendered
-  // inside a react element/component
-  const redirectRoute = r => navigate(r, { replace: true });
+  const showSuccess = async message => {
+    setError(false)
+    setSuccess(message)
+  }
 
   const onSubmit = methods.handleSubmit(data => {
     let accountData = Account.verifyAccount(data)
 
-
     // If it returned an Error, then use that for the message
     if ( accountData instanceof Error ){
-      //methods.reset()
       return showError( accountData.message )
     }
 
         // If the Account returned nothing, then take that as an error
     if ( accountData !== true ){
-      //methods.reset()
       return showError('Login failed')
     }
 
-    // Set cookie..
-    session.loginAs(data.email);
+    // Do the login stuff in context
+    setSessionContext(data.email)
 
+    // Show the login success message
     showSuccess( `Successfully logged in as ${data.email}!` )
 
     setLoginSuccess(true)
+    
+
+    // Redirect the user to their overview page after 1 second
+    setTimeout(() => {
+      navigate('/overview', { replace: true })
+    }, 1000);
   })
 
   return (
-    <FormProvider {...methods}>
-      { loginSuccess && redirectRoute('/overview') }
-      <Header className="grid gap-5 md:grid-cols-2"/>
+    <FormProvider { ...methods }>
+      { loginSuccess }
       <form
         onSubmit={e => e.preventDefault()}
         noValidate
@@ -77,7 +69,7 @@ export const Login = props => {
         className="login-container">
         {success && (
           <p className="font-semibold text-green-500 mb-5 flex items-center gap-1">
-            <BsFillCheckSquareFill /> {success || 'Success'}
+            <BsFillCheckSquareFill /> { success || 'Success' }
           </p>
         )}
         {error && (
