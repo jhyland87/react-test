@@ -1,5 +1,4 @@
-//import { Header } from './Header'
-import { Input } from './components'
+import { Input } from '../components'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
   name_validation,
@@ -8,13 +7,10 @@ import {
   phone_validation,
   password_validation,
   password2_validation
-} from './utils/inputValidations'
-import Account from './models/Account'
-import { session } from './utils'
-
+} from '../utils/inputValidations'
+import Account from '../models/Account'
 import { Link, useNavigate } from "react-router-dom";
-
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { BsFillCheckSquareFill, BsExclamationCircle } from 'react-icons/bs'
 
 export const Profile = props => {
@@ -32,8 +28,15 @@ export const Profile = props => {
   }
 
   const onSubmit = methods.handleSubmit(data => {
-    // Create the new account object with the updated info..
-    const newAccountObj = new Account(data)
+    // If the password is set for either field, then make sure they match one another..
+    if ( (data?.password || data?.password2) &&  data?.password !== data?.password2  ){
+      window.scrollTo(0, 0);
+      return setError('Passwords need to match')
+    }
+
+    // Create the new account object with the updated info (defaulting to the
+    // existing account info using the spread operator)
+    const newAccountObj = new Account({ ...sessionContext.data, ...data })
 
     // Save it (which just overrides the existing  one in the localStorage)
     newAccountObj.save();
@@ -79,8 +82,8 @@ export const Profile = props => {
           <Input {...email_validation} defaultValue={(sessionContext?.email || '')} />
           <Input {...phone_validation} defaultValue={(sessionContext?.phone || '')} />
           <Input {...color_validation} defaultValue={(sessionContext?.color || '')} />
-          <Input {...password_validation} defaultValue={(sessionContext?.password || '')} />
-          <Input {...password2_validation}  defaultValue={(sessionContext?.password || '')} />
+          <Input {...password_validation} makeOptional />
+          <Input {...password2_validation} makeOptional />
         </div>
         <div className="mt-5">
           <div className="flex items-center justify-between">

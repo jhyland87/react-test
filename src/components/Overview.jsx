@@ -1,14 +1,9 @@
 //import { Header } from './Header'
-import Account from './models/Account'
-import { session } from './utils'
 import { Link, useNavigate } from "react-router-dom";
-import React, { useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 
 export const Overview = props => {
-  const {sessionContext, setSessionContext} = useContext(props.context);
-
-  console.log('sessionContext:',sessionContext);
-
+  const { sessionContext } = useContext(props.context);
   const navigate = useNavigate();
 
   if (  sessionContext === false || typeof sessionContext !== 'object' ){

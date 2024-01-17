@@ -1,9 +1,9 @@
-import { session } from './utils'
+import { session } from '../utils'
 import { Link } from "react-router-dom";
-import React, { useState, useContext } from 'react'
+import React from 'react'
 
 export const Home = props => {
-  const {sessionContext, setSessionContext} = useContext(props.context);
+  //const {sessionContext, setSessionContext} = useContext(props.context);
 
   return (
     <div id="home-container" >     
@@ -15,7 +15,7 @@ export const Home = props => {
         </Link>  
        <span className="pad-left-right text-sm">or</span>
          <Link 
-          to="/profile"
+          to={session.getUsername() ? '/profile' : '/register'}
           className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" >
           {session.getUsername() ? 'Edit Profile' : 'Create Account'}
         </Link>

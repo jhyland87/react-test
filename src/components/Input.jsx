@@ -26,6 +26,9 @@ export const Input = ({
   makeOptional,
   defaultValue
 }) => {
+  if ( makeOptional && validation?.required?.value === true )
+    validation.required.value = false;
+
   const {
     register,
     formState: { errors },

@@ -1,6 +1,6 @@
 
-import { session } from './utils'
-import React, { useState, useContext } from 'react'
+import { session } from '../utils'
+import React, { useContext } from 'react'
 
 export const Logout = props => {
   const {sessionContext, setSessionContext} = useContext(props.context);

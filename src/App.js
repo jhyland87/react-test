@@ -1,14 +1,14 @@
 import React, { createContext, useState } from 'react';
 import './assets/index.css'
 import Account from './models/Account'
-import { Login } from './Login';
-import { Logout } from './Logout';
-import { Delete } from './Delete';
-import { Register } from './Register';
-import { Profile } from './Profile';
-import { Overview } from './Overview';
-import { Home } from './Home';
-import { Header } from './Header'
+import { Login } from './components/Login';
+import { Logout } from './components/Logout';
+import { Delete } from './components/Delete';
+import { Register } from './components/Register';
+import { Profile } from './components/Profile';
+import { Overview } from './components/Overview';
+import { Home } from './components/Home';
+import { Header } from './components/Header'
 import { session } from './utils'
 import { config } from './config'
 import {

@@ -1,7 +1,7 @@
 
-import { session } from './utils'
+import { session } from '../utils'
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 
 export const LogoutLink = props => {
   const navigate = useNavigate();
@@ -17,9 +17,6 @@ export const LogoutLink = props => {
       setSessionContext(false)
 
       navigate('/');    
-    }
-    else {
-      console.log('Not logged in..', sessionContext)
     }
   }
 

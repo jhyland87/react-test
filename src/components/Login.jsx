@@ -1,24 +1,24 @@
-import { Input } from './components'
+import { Input } from './Input'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
   login_email_validation,
   login_password_validation,
-} from './utils/inputValidations'
-import { session } from './utils'
+} from '../utils/inputValidations'
 import React, { useState, useContext} from 'react'
 import { BsFillCheckSquareFill, BsExclamationCircle } from 'react-icons/bs'
 import { Link, useNavigate } from "react-router-dom";
-import Account from './models/Account'
+import Account from '../models/Account'
 
 
 export const Login = props => {
-  const {sessionContext, setSessionContext} = useContext(props.context);
+  const {setSessionContext} = useContext(props.context);
 
   const methods = useForm()
   const navigate = useNavigate();
 
   const [success, setSuccess] = useState(props?.message || false)
   const [error, setError] = useState(props?.error || false)
+  const [showRegisterLink, setShowRegisterLink] = useState(false)
   const [loginSuccess, setLoginSuccess] = useState(false)
 
   const showError = err => {
@@ -36,6 +36,10 @@ export const Login = props => {
 
     // If it returned an Error, then use that for the message
     if ( accountData instanceof Error ){
+
+      if ( accountData?.code === 404 )
+        setShowRegisterLink(true)
+      
       return showError( accountData.message )
     }
 
@@ -74,11 +78,14 @@ export const Login = props => {
         )}
         {error && (
           <p className="font-semibold text-red-500 mb-5 flex items-center gap-1">
-            <BsExclamationCircle /> Error: {error}
+            <BsExclamationCircle /> Error: {error} {showRegisterLink && ( <Link to="/register"
+              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#"> 
+              Create an account
+            </Link>)}
           </p>
         )}
         <div className="grid gap-5 md:grid-cols-2">
-          <Input {...login_email_validation} />
+          <Input {...login_email_validation} autoFocus />
           <Input {...login_password_validation} />
         </div>
         <div className="mt-5">

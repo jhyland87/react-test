@@ -1,14 +1,10 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { session } from './utils'
-import React, { useState, useEffect, useContext } from 'react'
+import { Link, useNavigate } from "react-router-dom";
+import React, { useContext } from 'react'
 import { LogoutLink } from './LogoutLink';
 
 export const Header = (props) => {
-  const {sessionContext, setSessionContext} = useContext(props.context);
-
-  const location = useLocation();
+  const { sessionContext } = useContext(props.context);
   const navigate = useNavigate();
-
   const homeLink = e =>  navigate('/')
 
   const logoutLink = <LogoutLink context={props.context} />

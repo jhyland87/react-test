@@ -46,10 +46,10 @@ export default class Account {
 
     let accountObj = localStorage.getItem( email.toLowerCase() );
 
-    //console.log('accountObj:',accountObj)
-
     if ( ! accountObj ) {
-      return new Error(`No account with the email '${email}'`)
+      const err = new Error(`No account with the email '${email}'`)
+      err.code = 404
+      return err
     }
 
     accountObj = JSON.parse(accountObj)
@@ -114,7 +114,6 @@ export default class Account {
     
     return '+' + phone;
   }
-
 
   get data(){
     return this.#_data;

@@ -96,6 +96,7 @@ export const phone_validation = {
 }
 
 export const email_validation = {
+  autoFocus: true,
   name: 'email',
   label: 'email address',
   type: 'email',

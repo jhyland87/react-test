@@ -1,4 +1,4 @@
-import { Input } from './components'
+import { Input } from './'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
   name_validation,
@@ -7,33 +7,28 @@ import {
   phone_validation,
   password_validation,
   password2_validation
-} from './utils/inputValidations'
+} from '../utils/inputValidations'
 import { Link,  useNavigate } from "react-router-dom";
 import React, { useState, useContext } from 'react'
 import { BsFillCheckSquareFill, BsExclamationCircle } from 'react-icons/bs'
-import Account from './models/Account'
+import Account from '../models/Account'
 
 export const Register = props => {
-  const {
-    //sessionContext, 
-    setSessionContext
-  } = useContext(props.context);
-
+  const { setSessionContext } = useContext(props.context);
   const navigate = useNavigate();
-
   const methods = useForm()
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
 
   const onSubmit = methods.handleSubmit(data => {
-    console.log('data:',data)
-
-    if ( data.password !== data.password2 ){
+    if (  data.password &&  data.password2 && data.password !== data.password2 ){
+      window.scrollTo(0, 0);
       return setError(`The passwords do not match`)
     }
 
     // Check if the account already exists
     if ( Account.getAccount( data.email )){
+      window.scrollTo(0, 0);
       return setError(`An account with ${data.email} already exists`) 
     }
 
@@ -47,9 +42,7 @@ export const Register = props => {
     setError(false)
 
     setSessionContext(data.email)
-    setTimeout(() => {
-      navigate('/overview', { replace: true })
-    }, 500);
+    setTimeout(() => navigate('/overview', { replace: true }), 500);
   })
 
   return (
@@ -71,7 +64,7 @@ export const Register = props => {
           </p>
         )}
         <div className="grid gap-5 md:grid-cols-2">
-          <Input {...name_validation} />
+          <Input {...name_validation} autoFocus />
           <Input {...email_validation} />
           <Input {...phone_validation} />
           <Input {...color_validation}  />
